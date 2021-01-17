@@ -74,3 +74,50 @@ func TestGetGoModPath(t *testing.T) {
 		})
 	}
 }
+
+func TestGetGoModule(t *testing.T) {
+	type args struct {
+		goMod string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    string
+		wantErr bool
+	}{
+		{
+			name: "success",
+			args: args{
+				goMod: "../go.mod",
+			},
+			want:    "github.com/go-utils/gopackages",
+			wantErr: false,
+		},
+		{
+			name: "failure",
+			args: args{
+				goMod: "../go.sum",
+			},
+			wantErr: true,
+		},
+		{
+			name: "failure",
+			args: args{
+				goMod: "gopackages_test.go",
+			},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := gopackages.GetGoModule(tt.args.goMod)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetGoModule() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("GetGoModule() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
