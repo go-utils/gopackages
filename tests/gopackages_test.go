@@ -79,6 +79,7 @@ func TestGetGoModule(t *testing.T) {
 	type args struct {
 		goMod string
 	}
+
 	tests := []struct {
 		name    string
 		args    args
@@ -108,7 +109,9 @@ func TestGetGoModule(t *testing.T) {
 			wantErr: true,
 		},
 	}
+
 	for _, tt := range tests {
+		tt := tt // escape: Using the variable on range scope `tt` in loop literal.
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := gopackages.GetGoModule(tt.args.goMod)
 			if (err != nil) != tt.wantErr {
